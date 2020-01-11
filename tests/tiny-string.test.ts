@@ -1,9 +1,7 @@
-# tiny-string
-Compress a string using this small library by an average of 30-45%. Use training data to improve the performance depending on the type of data you want to compress.
+import assert from 'assert'
+import * as testSuite from '../tiny-string'
 
-## Sample usage
-```typescript
-const jsonTrainingData: string = `
+const jsonTrainingData = `
 {"id":1,"name":"Ryan Peterson","country":"Northern Mariana Islands","email":"rpeterson@youspan.mil"},
 {"id":2,"name":"Judith Mason","country":"Puerto Rico","email":"jmason@quatz.com"},
 {"id":3,"name":"Kenneth Berry","country":"Pakistan","email":"kberry@wordtune.mil"},
@@ -26,21 +24,14 @@ const jsonTrainingData: string = `
 {"id":20,"name":"Henry Hunt","country":"Martinique","email":"hhunt@thoughtstorm.org"}
 `
 
-const jsonSample: string = `{"id":33,"name":"John Doe","country":"United States","email":"bob@blah.org"}`
+const jsonSample = `{"id":33,"name":"John Doe","country":"United States","email":"bob@blah.org"}`
 
-const jsonTrainedDictionary: string[] = generateDictionary(jsonTrainingData)
-console.time('JSON trainedDict')
-const jsonTrainedDictCompression: string = tinyStringCompress(jsonSample, jsonTrainedDictionary)
-console.timeEnd('JSON trainedDict')
-
-console.time('JSON trainedDict decompress')
-const jsonTrainedDictDecompression: string = tinyStringDecompress(jsonTrainedDictCompression, jsonTrainedDictionary)
-console.timeEnd('JSON trainedDict decompress')
-
-console.log('Original:', redditPost + '\n')
-console.log('Decompressed', jsonTrainedDictDecompression + '\n')
-console.log('Compressed:', jsonTrainedDictCompression,
-    Number((1 - jsonTrainedDictCompression.length / jsonSample.length) * 100).toFixed(2) + '% compressed' + '\n')
-console.log('Original length', jsonSample.length + '\n')
-console.log('Compressed length', jsonTrainedDictCompression.length + '\n')
-```
+describe('tiny-string test suite', () => {
+    it('should compress and decompress a string correctly', () => {
+        const jsonTrainedDictionary = testSuite.generateDictionary(jsonTrainingData)
+        const compressed = testSuite.tinyStringCompress(jsonSample, jsonTrainedDictionary)
+        const decompressed = testSuite.tinyStringDecompress(compressed, jsonTrainedDictionary)
+        assert.equal(jsonSample, decompressed, 'Decompressed string does not match!')
+        assert.equal(compressed.length < jsonSample.length, true, 'Compression did not work!')
+    })
+})
