@@ -1,5 +1,5 @@
 {
-  "name": "tiny-string",
+  "name": "tiny-string-js",
   "version": "1.0.0",
   "private": false,
   "description": "Compress a string or dataset by an average of 35-40%",
@@ -27,16 +27,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dcmox/debounceif.git"
+    "url": "git+https://github.com/dcmox/tiny-string.git"
   },
   "keywords": [
-    "debounce",
-    "retry"
+    "tiny-string",
+    "compress",
+    "smaz",
+    "dictionary",
+    "compression"
   ],
   "author": "Daniel Moxon (dancmox@comcast.net)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/dcmox/debounceif/issues"
+    "url": "https://github.com/dcmox/tiny-string/issues"
   },
-  "homepage": "https://github.com/dcmox/debounceif#readme"
+  "homepage": "https://github.com/dcmox/tiny-string#readme"
 }
