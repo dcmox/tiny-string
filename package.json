@@ -1,6 +1,6 @@
 {
   "name": "tiny-string-js",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": false,
   "description": "Compress a string or dataset by an average of 35-40%",
   "main": "tiny-string.js",

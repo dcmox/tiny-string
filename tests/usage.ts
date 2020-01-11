@@ -1,4 +1,3 @@
-import assert from 'assert'
 import { generateDictionary, tinyStringCompress, tinyStringDecompress } from '../tiny-string'
 
 // Post from https://www.reddit.com/r/AskReddit/comments/emqd57/what_brand_are_you_loyal_to_and_why/
