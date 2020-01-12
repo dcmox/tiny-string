@@ -30,7 +30,7 @@ export const defaultDictionary: string[] = [' the', 'and ', ' and', 'ing ', 'the
 'ma', ' e', 'ey', 'as', 'ho', 'be', 'ay', 'us', 'is', 'it', '.↵', 'em', 'rs', 'ce', 'br', 'ra', 'no', ' d', 'ri', 'm ', 'pa', 'el']
 
 /* Larger dictionary size means better true compression. */
-export const generateDictionary = (data: string, sLen: number = 6, MBYTES: number = 896): string[] => {
+export const generateDictionary = (data: string, sLen: number = 6, sz: number = 896): string[] => {
     let dict: any = []
     for (let i = 0; i < data.length - sLen; i++) {
         for (let j = 2; j < sLen; j++) {
@@ -41,7 +41,7 @@ export const generateDictionary = (data: string, sLen: number = 6, MBYTES: numbe
         }
     }
     dict = dict.sort((a: any, b: any) => a.count > b.count ? -1 : 1)
-    if (dict.length > MBYTES) { dict = dict.slice(0, MBYTES) }
+    if (dict.length > sz) { dict = dict.slice(0, sz) }
     dict = dict.map((item: any) => item.slot).sort((a: any, b: any) => a.length > b.length ? -1 : 1)
     return dict
 }

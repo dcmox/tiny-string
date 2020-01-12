@@ -30,9 +30,9 @@ exports.defaultDictionary = [' the', 'and ', ' and', 'ing ', 'the ', ' for', ' t
     'li', 'ir', 'ha', ' l', 'nt', 'ar', ' n', 'ed', 'll', 'ea', 'I ', ' i', ', ', 'ou', 'at', 'al', 'om', 'ke', ' I', 'of', 'ro', 'w ', 'mo', 'ot',
     'ma', ' e', 'ey', 'as', 'ho', 'be', 'ay', 'us', 'is', 'it', '.↵', 'em', 'rs', 'ce', 'br', 'ra', 'no', ' d', 'ri', 'm ', 'pa', 'el'];
 /* Larger dictionary size means better true compression. */
-exports.generateDictionary = function (data, sLen, MBYTES) {
+exports.generateDictionary = function (data, sLen, sz) {
     if (sLen === void 0) { sLen = 6; }
-    if (MBYTES === void 0) { MBYTES = 896; }
+    if (sz === void 0) { sz = 896; }
     var dict = [];
     for (var i = 0; i < data.length - sLen; i++) {
         var _loop_1 = function (j) {
@@ -46,8 +46,8 @@ exports.generateDictionary = function (data, sLen, MBYTES) {
         }
     }
     dict = dict.sort(function (a, b) { return a.count > b.count ? -1 : 1; });
-    if (dict.length > MBYTES) {
-        dict = dict.slice(0, MBYTES);
+    if (dict.length > sz) {
+        dict = dict.slice(0, sz);
     }
     dict = dict.map(function (item) { return item.slot; }).sort(function (a, b) { return a.length > b.length ? -1 : 1; });
     return dict;
