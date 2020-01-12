@@ -29,10 +29,10 @@ export const defaultDictionary: string[] = [' the', 'and ', ' and', 'ing ', 'the
 'li', 'ir', 'ha', ' l', 'nt', 'ar', ' n', 'ed', 'll', 'ea', 'I ', ' i', ', ', 'ou', 'at', 'al', 'om', 'ke', ' I', 'of', 'ro', 'w ', 'mo', 'ot',
 'ma', ' e', 'ey', 'as', 'ho', 'be', 'ay', 'us', 'is', 'it', '.↵', 'em', 'rs', 'ce', 'br', 'ra', 'no', ' d', 'ri', 'm ', 'pa', 'el']
 
-export const generateDictionary = (data: string, sLen: number = 5): string[] => {
+/* Larger dictionary size means better true compression. */
+export const generateDictionary = (data: string, sLen: number = 6, MBYTES: number = 896): string[] => {
     let dict: any = []
-    const mLen: number = 128
-    for (let i = 0; i < data.length - mLen; i++) {
+    for (let i = 0; i < data.length - sLen; i++) {
         for (let j = 2; j < sLen; j++) {
             const slot: string = data.substring(i, i + j)
             if (!dict.some((item: any) => item.slot === slot)) {
@@ -41,23 +41,26 @@ export const generateDictionary = (data: string, sLen: number = 5): string[] => 
         }
     }
     dict = dict.sort((a: any, b: any) => a.count > b.count ? -1 : 1)
-    if (dict.length > mLen) { dict = dict.slice(0, mLen) }
+    if (dict.length > MBYTES) { dict = dict.slice(0, MBYTES) }
     dict = dict.map((item: any) => item.slot).sort((a: any, b: any) => a.length > b.length ? -1 : 1)
     return dict
 }
 
-export const tinyStringCompress = (data: string, dict: string[]): string => {
+export const trueByteSize = (data: string): number =>
+    encodeURI(data).split(/%(?:u[0-9A-F]{2})?[0-9A-F]{2}|./).length - 1
+
+export const tinyStringCompress = (data: string, dict: string[] = defaultDictionary): string => {
     let compressed: string = data
     dict.forEach((slot: string, i: number) => {
-        compressed = compressed.split(slot).join(String.fromCharCode(128 + i))
+        compressed = compressed.split(slot).join(String.fromCharCode(i + 128))
     })
     return compressed
 }
 
-export const tinyStringDecompress = (data: string, dict: string[]): string => {
+export const tinyStringDecompress = (data: string, dict: string[] = defaultDictionary): string => {
     let compressed: string = data
     dict.forEach((slot: string, i: number) => {
-        compressed = compressed.split(String.fromCharCode(128 + i)).join(slot)
+        compressed = compressed.split(String.fromCharCode(i + 128)).join(slot)
     })
     return compressed
 }

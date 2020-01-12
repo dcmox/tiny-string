@@ -29,11 +29,12 @@ exports.defaultDictionary = [' the', 'and ', ' and', 'ing ', 'the ', ' for', ' t
     'or', 'on', ' f', ' c', 'en', 'ng', 'to', 'es', 'a ', '. ', 'se', ' h', ' p', ' w', ' o', 'ti', 'me', 'fo', 'st', 'g ', 've', 'n ', 'le', 'ne',
     'li', 'ir', 'ha', ' l', 'nt', 'ar', ' n', 'ed', 'll', 'ea', 'I ', ' i', ', ', 'ou', 'at', 'al', 'om', 'ke', ' I', 'of', 'ro', 'w ', 'mo', 'ot',
     'ma', ' e', 'ey', 'as', 'ho', 'be', 'ay', 'us', 'is', 'it', '.↵', 'em', 'rs', 'ce', 'br', 'ra', 'no', ' d', 'ri', 'm ', 'pa', 'el'];
-exports.generateDictionary = function (data, sLen) {
-    if (sLen === void 0) { sLen = 5; }
+/* Larger dictionary size means better true compression. */
+exports.generateDictionary = function (data, sLen, MBYTES) {
+    if (sLen === void 0) { sLen = 6; }
+    if (MBYTES === void 0) { MBYTES = 896; }
     var dict = [];
-    var mLen = 128;
-    for (var i = 0; i < data.length - mLen; i++) {
+    for (var i = 0; i < data.length - sLen; i++) {
         var _loop_1 = function (j) {
             var slot = data.substring(i, i + j);
             if (!dict.some(function (item) { return item.slot === slot; })) {
@@ -45,23 +46,28 @@ exports.generateDictionary = function (data, sLen) {
         }
     }
     dict = dict.sort(function (a, b) { return a.count > b.count ? -1 : 1; });
-    if (dict.length > mLen) {
-        dict = dict.slice(0, mLen);
+    if (dict.length > MBYTES) {
+        dict = dict.slice(0, MBYTES);
     }
     dict = dict.map(function (item) { return item.slot; }).sort(function (a, b) { return a.length > b.length ? -1 : 1; });
     return dict;
 };
+exports.trueByteSize = function (data) {
+    return encodeURI(data).split(/%(?:u[0-9A-F]{2})?[0-9A-F]{2}|./).length - 1;
+};
 exports.tinyStringCompress = function (data, dict) {
+    if (dict === void 0) { dict = exports.defaultDictionary; }
     var compressed = data;
     dict.forEach(function (slot, i) {
-        compressed = compressed.split(slot).join(String.fromCharCode(128 + i));
+        compressed = compressed.split(slot).join(String.fromCharCode(i + 128));
     });
     return compressed;
 };
 exports.tinyStringDecompress = function (data, dict) {
+    if (dict === void 0) { dict = exports.defaultDictionary; }
     var compressed = data;
     dict.forEach(function (slot, i) {
-        compressed = compressed.split(String.fromCharCode(128 + i)).join(slot);
+        compressed = compressed.split(String.fromCharCode(i + 128)).join(slot);
     });
     return compressed;
 };

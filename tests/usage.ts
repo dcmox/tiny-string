@@ -1,4 +1,4 @@
-import { generateDictionary, tinyStringCompress, tinyStringDecompress } from '../tiny-string'
+import { generateDictionary, tinyStringCompress, tinyStringDecompress, trueByteSize } from '../tiny-string'
 
 // Post from https://www.reddit.com/r/AskReddit/comments/emqd57/what_brand_are_you_loyal_to_and_why/
 const trainingData: string = `
@@ -32,12 +32,13 @@ console.log('Original:', redditPost + '\n')
 console.log('Decompressed', trainedDictDecompression + '\n')
 console.log('Compressed:', trainedDictCompression,
     Number((1 - trainedDictCompression.length / redditPost.length) * 100).toFixed(2) + '% compressed' + '\n')
-console.log('Original length', redditPost.length + '\n')
-console.log('Compressed length', trainedDictCompression.length + '\n')
+console.log('Original length', redditPost.length)
+console.log('Compressed length', trainedDictCompression.length)
+/* JavaScript .length gets number of characters, not the actual byte size! Each char can be between 1-4 bytes */
+console.log('Byte size', trueByteSize(trainedDictCompression))
 console.log('==========================================================================================')
 
-const jsonTrainingData: string = `
-{"id":1,"name":"Ryan Peterson","country":"Northern Mariana Islands","email":"rpeterson@youspan.mil"},
+const jsonTrainingData: string = `{"id":1,"name":"Ryan Peterson","country":"Northern Mariana Islands","email":"rpeterson@youspan.mil"},
 {"id":2,"name":"Judith Mason","country":"Puerto Rico","email":"jmason@quatz.com"},
 {"id":3,"name":"Kenneth Berry","country":"Pakistan","email":"kberry@wordtune.mil"},
 {"id":4,"name":"Judith Ortiz","country":"Cuba","email":"jortiz@snaptags.edu"},
@@ -56,8 +57,7 @@ const jsonTrainingData: string = `
 {"id":17,"name":"Annie Burton","country":"Germany","email":"aburton@linktype.com"},
 {"id":18,"name":"Margaret Wilson","country":"Saudia Arabia","email":"mwilson@brainverse.mil"},
 {"id":19,"name":"Louise Harper","country":"Poland","email":"lharper@skinder.info"},
-{"id":20,"name":"Henry Hunt","country":"Martinique","email":"hhunt@thoughtstorm.org"}
-`
+{"id":20,"name":"Henry Hunt","country":"Martinique","email":"hhunt@thoughtstorm.org"}`
 
 const jsonSample: string = `{"id":33,"name":"John Doe","country":"United States","email":"bob@blah.org"}`
 
@@ -74,5 +74,7 @@ console.log('Original:', redditPost + '\n')
 console.log('Decompressed', jsonTrainedDictDecompression + '\n')
 console.log('Compressed:', jsonTrainedDictCompression,
     Number((1 - jsonTrainedDictCompression.length / jsonSample.length) * 100).toFixed(2) + '% compressed' + '\n')
-console.log('Original length', jsonSample.length + '\n')
-console.log('Compressed length', jsonTrainedDictCompression.length + '\n')
+console.log('Original length', jsonSample.length)
+console.log('Compressed length', jsonTrainedDictCompression.length)
+/* JavaScript .length gets number of characters, not the actual byte size! Each char can be between 1-4 bytes */
+console.log('Byte size', trueByteSize(jsonTrainedDictCompression))

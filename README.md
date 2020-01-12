@@ -1,5 +1,20 @@
 # tiny-string
-Compress a string using this small library by an average of 30-45%. Use training data to improve the performance depending on the type of data you want to compress.
+Compress a string down to a smaller length using this library. Use training data to improve the performance depending on the type of data you want to compress.
+
+## Dictionary slot length
+When generating a dictionary, you can specify the slot length as the second parameter, eg:
+```typescript
+let dict = generateDictionary(trainingData, 5) // slot length of 5
+```
+Note: The larger the slot length, the more computationally expensive it will be for generating a dictionary. If you choose a slot size larger than 6, it is recommended that you cache the dictionary for re-use.
+
+## Dictionary size
+You can adjust the dictionary size of this algorithm using the 3rd parameter. Default has been increased from 128 to 896. The first 128 ASCII characters are reserved for the standard character set. String length can be reduced 40-65% with compression. True compression size (total byte size of string) will be much less (even the well known Smaz algorithm fails to note this).
+
+Example:
+```typescript
+let dict = generateDictionary(trainingData, 6, 2048) // slot length of 6 with 2048 entries and encoding range of 128-2176 (2048+128)
+```
 
 ## Sample usage
 ```typescript
